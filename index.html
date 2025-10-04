@@ -1,0 +1,1003 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VZORKIN RUST | Dev Blog</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        :root {
+            --primary: #ff8c00;
+            --primary-dark: #e67e00;
+            --primary-light: #ffa733;
+            --dark: #0a0a0a;
+            --dark-light: #1a1a1a;
+            --text: #f5f5f5;
+            --text-muted: #aaa;
+        }
+
+        body {
+            background-color: var(--dark);
+            color: var(--text);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background-color: rgba(10, 10, 10, 0.95);
+            padding: 20px 0;
+            border-bottom: 1px solid var(--primary);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+
+        .logo h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--primary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .logo span {
+            color: var(--text);
+        }
+
+        nav ul {
+            display: flex;
+            list-style: none;
+        }
+
+        nav ul li {
+            margin-left: 30px;
+        }
+
+        nav ul li a {
+            color: var(--text);
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+            position: relative;
+        }
+
+        nav ul li a::after {
+            content: '';
+            position: absolute;
+            bottom: -5px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background-color: var(--primary);
+            transition: width 0.3s ease;
+        }
+
+        nav ul li a:hover {
+            color: var(--primary);
+        }
+
+        nav ul li a:hover::after {
+            width: 100%;
+        }
+
+        /* Hero Section */
+        .hero {
+            background: linear-gradient(rgba(10, 10, 10, 0.7), rgba(10, 10, 10, 0.8)), url('https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 80vh;
+            display: flex;
+            align-items: center;
+            text-align: center;
+            padding: 0 20px;
+        }
+
+        .hero-content h2 {
+            font-size: 48px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-transform: uppercase;
+            animation: fadeInUp 1s ease;
+        }
+
+        .hero-content p {
+            font-size: 20px;
+            max-width: 700px;
+            margin: 0 auto 30px;
+            color: var(--text);
+            animation: fadeInUp 1s ease 0.2s both;
+        }
+
+        .btn {
+            display: inline-block;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: var(--dark);
+            padding: 12px 30px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: 700;
+            text-transform: uppercase;
+            transition: all 0.3s ease;
+            border: none;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(255, 140, 0, 0.3);
+            animation: fadeInUp 1s ease 0.4s both;
+        }
+
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(255, 140, 0, 0.4);
+        }
+
+        /* About Section */
+        .about {
+            padding: 80px 0;
+            background-color: var(--dark-light);
+        }
+
+        .section-title {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+
+        .section-title h2 {
+            font-size: 36px;
+            color: var(--primary);
+            text-transform: uppercase;
+            position: relative;
+            display: inline-block;
+            padding-bottom: 10px;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 80px;
+            height: 3px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+        }
+
+        .about-content {
+            display: flex;
+            align-items: center;
+            gap: 40px;
+        }
+
+        .about-text {
+            flex: 1;
+        }
+
+        .about-text p {
+            margin-bottom: 20px;
+            color: var(--text-muted);
+        }
+
+        .about-image {
+            flex: 1;
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .about-image img {
+            width: 100%;
+            height: auto;
+            display: block;
+            transition: transform 0.5s ease;
+        }
+
+        .about-image:hover img {
+            transform: scale(1.05);
+        }
+
+        /* Features Section */
+        .features {
+            padding: 80px 0;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 30px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: linear-gradient(145deg, var(--dark-light), #151515);
+            border-radius: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        }
+
+        .feature-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 25px rgba(255, 140, 0, 0.2);
+        }
+
+        .feature-icon {
+            font-size: 40px;
+            color: var(--primary);
+            margin-bottom: 20px;
+        }
+
+        .feature-card h3 {
+            font-size: 20px;
+            margin-bottom: 15px;
+            color: var(--primary);
+        }
+
+        /* Footer */
+        footer {
+            background-color: var(--dark);
+            padding: 40px 0 20px;
+            border-top: 1px solid var(--primary);
+        }
+
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            flex-wrap: wrap;
+            margin-bottom: 30px;
+        }
+
+        .footer-column {
+            flex: 1;
+            min-width: 200px;
+            margin-bottom: 20px;
+        }
+
+        .footer-column h3 {
+            font-size: 18px;
+            margin-bottom: 20px;
+            color: var(--primary);
+            text-transform: uppercase;
+        }
+
+        .footer-column ul {
+            list-style: none;
+        }
+
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-column ul li a {
+            color: var(--text-muted);
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-column ul li a:hover {
+            color: var(--primary);
+        }
+
+        .social-links {
+            display: flex;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .social-links a {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            width: 40px;
+            height: 40px;
+            background-color: var(--dark-light);
+            border-radius: 50%;
+            color: var(--text);
+            transition: all 0.3s ease;
+        }
+
+        .social-links a:hover {
+            background-color: var(--primary);
+            color: var(--dark);
+            transform: translateY(-3px);
+        }
+
+        .copyright {
+            text-align: center;
+            padding-top: 20px;
+            border-top: 1px solid #333;
+            color: var(--text-muted);
+            font-size: 14px;
+        }
+
+        /* Каталог */
+        .catalog {
+            padding: 80px 0;
+            display: none;
+        }
+
+        .privileges-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 30px;
+        }
+
+        .privilege-card {
+            background: linear-gradient(145deg, var(--dark-light), #151515);
+            border-radius: 10px;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            border: 1px solid #333;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            cursor: pointer;
+        }
+
+        .privilege-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 15px 30px rgba(255, 140, 0, 0.2);
+            border-color: var(--primary);
+        }
+
+        .privilege-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 20px;
+            text-align: center;
+        }
+
+        .privilege-header h3 {
+            font-size: 24px;
+            color: var(--dark);
+            margin-bottom: 5px;
+        }
+
+        .privilege-price {
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .privilege-content {
+            padding: 20px;
+        }
+
+        .privilege-features {
+            list-style: none;
+            margin-bottom: 20px;
+        }
+
+        .privilege-features li {
+            padding: 8px 0;
+            border-bottom: 1px solid #333;
+            color: var(--text-muted);
+            display: flex;
+            align-items: center;
+        }
+
+        .privilege-features li:last-child {
+            border-bottom: none;
+        }
+
+        .privilege-features li i {
+            color: var(--primary);
+            margin-right: 10px;
+        }
+
+        /* Детали привилегии */
+        .privilege-details {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            z-index: 1000;
+            overflow-y: auto;
+            padding: 40px 20px;
+        }
+
+        .privilege-details-content {
+            max-width: 800px;
+            margin: 0 auto;
+            background: linear-gradient(145deg, var(--dark-light), #151515);
+            border-radius: 10px;
+            overflow: hidden;
+            box-shadow: 0 10px 40px rgba(255, 140, 0, 0.3);
+        }
+
+        .privilege-details-header {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            padding: 30px;
+            text-align: center;
+        }
+
+        .privilege-details-header h2 {
+            font-size: 32px;
+            color: var(--dark);
+            margin-bottom: 10px;
+        }
+
+        .privilege-details-price {
+            font-size: 36px;
+            font-weight: 700;
+            color: var(--dark);
+        }
+
+        .privilege-details-body {
+            padding: 30px;
+        }
+
+        .privilege-details-body h3 {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 20px;
+            border-bottom: 1px solid #333;
+            padding-bottom: 10px;
+        }
+
+        .resources-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        .resource-item {
+            background-color: rgba(255, 140, 0, 0.1);
+            border: 1px solid rgba(255, 140, 0, 0.3);
+            border-radius: 5px;
+            padding: 15px;
+            text-align: center;
+        }
+
+        .resource-item i {
+            font-size: 24px;
+            color: var(--primary);
+            margin-bottom: 10px;
+        }
+
+        .resource-item p {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .close-details {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: none;
+            border: none;
+            color: var(--primary);
+            font-size: 30px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+
+        .close-details:hover {
+            color: var(--text);
+        }
+
+        /* Animations */
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 20px;
+            }
+            
+            nav ul li {
+                margin: 0 10px;
+            }
+            
+            .hero-content h2 {
+                font-size: 36px;
+            }
+            
+            .hero-content p {
+                font-size: 18px;
+            }
+            
+            .about-content {
+                flex-direction: column;
+            }
+            
+            .resources-grid {
+                grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <h1>VZORKIN <span>RUST</span></h1>
+                </div>
+                <nav>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="home">Главная</a></li>
+                        <li><a href="#" class="nav-link" data-page="catalog">Каталог</a></li>
+                        <li><a href="#about">О проекте</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- Главная страница -->
+    <div id="home-page">
+        <!-- Hero Section -->
+        <section class="hero" id="home">
+            <div class="container">
+                <div class="hero-content">
+                    <div>
+                        <h2>VZORKIN RUST Dev Blog</h2>
+                        <p>Добро пожаловать в мир Rust! Читайте наш блог о разработке, получайте уникальные привилегии и становитесь частью нашего сообщества.</p>
+                        <a href="#" class="btn nav-link" data-page="catalog">Перейти в каталог</a>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about" id="about">
+            <div class="container">
+                <div class="section-title">
+                    <h2>О нашем проекте</h2>
+                </div>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>VZORKIN RUST - это уникальный проект, посвященный игре Rust. Мы создаем контент, делимся опытом разработки и предоставляем лучшие привилегии для наших участников.</p>
+                        <p>Наш блог регулярно пополняется новыми статьями о геймдеве, советами по игре и эксклюзивными материалами от нашей команды разработчиков.</p>
+                        <p>Присоединяйтесь к нашему сообществу, чтобы быть в курсе всех обновлений и получить доступ к эксклюзивному контенту!</p>
+                    </div>
+                    <div class="about-image">
+                        <img src="https://images.unsplash.com/photo-1550745165-9bc0b252726f?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Rust Game">
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Features Section -->
+        <section class="features">
+            <div class="container">
+                <div class="section-title">
+                    <h2>Почему выбирают нас</h2>
+                </div>
+                <div class="features-grid">
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Разработка</h3>
+                        <p>Эксклюзивные материалы о разработке и геймдеве</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-users"></i>
+                        </div>
+                        <h3>Сообщество</h3>
+                        <p>Активное и дружелюбное сообщество игроков</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-gem"></i>
+                        </div>
+                        <h3>Привилегии</h3>
+                        <p>Уникальные привилегии для наших подписчиков</p>
+                    </div>
+                    <div class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fas fa-headset"></i>
+                        </div>
+                        <h3>Поддержка</h3>
+                        <p>Круглосуточная поддержка по всем вопросам</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Страница каталога -->
+    <section class="catalog" id="catalog-page">
+        <div class="container">
+            <div class="section-title">
+                <h2>Каталог привилегий</h2>
+            </div>
+            <div class="privileges-grid">
+                <div class="privilege-card" data-privilege="titan">
+                    <div class="privilege-header">
+                        <h3>Титан</h3>
+                        <div class="privilege-price">500 руб.</div>
+                    </div>
+                    <div class="privilege-content">
+                        <ul class="privilege-features">
+                            <li><i class="fas fa-check"></i> 3x рейты</li>
+                            <li><i class="fas fa-check"></i> Эксклюзивные киты</li>
+                            <li><i class="fas fa-check"></i> Дополнительные ресурсы</li>
+                            <li><i class="fas fa-check"></i> Доступ к приватным новостям</li>
+                            <li><i class="fas fa-check"></i> Приоритетная поддержка</li>
+                        </ul>
+                        <a href="#" class="btn show-details">Подробнее</a>
+                    </div>
+                </div>
+                <div class="privilege-card" data-privilege="veteran">
+                    <div class="privilege-header">
+                        <h3>Ветеран</h3>
+                        <div class="privilege-price">1000 руб.</div>
+                    </div>
+                    <div class="privilege-content">
+                        <ul class="privilege-features">
+                            <li><i class="fas fa-check"></i> 5x рейты</li>
+                            <li><i class="fas fa-check"></i> Расширенные киты</li>
+                            <li><i class="fas fa-check"></i> Увеличенные ресурсы</li>
+                            <li><i class="fas fa-check"></i> Доступ к бета-тестам</li>
+                            <li><i class="fas fa-check"></i> Личный менеджер</li>
+                        </ul>
+                        <a href="#" class="btn show-details">Подробнее</a>
+                    </div>
+                </div>
+                <div class="privilege-card" data-privilege="legend">
+                    <div class="privilege-header">
+                        <h3>Легенда</h3>
+                        <div class="privilege-price">2000 руб.</div>
+                    </div>
+                    <div class="privilege-content">
+                        <ul class="privilege-features">
+                            <li><i class="fas fa-check"></i> 10x рейты</li>
+                            <li><i class="fas fa-check"></i> Легендарные киты</li>
+                            <li><i class="fas fa-check"></i> Максимальные ресурсы</li>
+                            <li><i class="fas fa-check"></i> Участие в ивентах</li>
+                            <li><i class="fas fa-check"></i> Прямая связь с командой</li>
+                        </ul>
+                        <a href="#" class="btn show-details">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Детали привилегии Титан -->
+    <div class="privilege-details" id="titan-details">
+        <button class="close-details">&times;</button>
+        <div class="privilege-details-content">
+            <div class="privilege-details-header">
+                <h2>Титан</h2>
+                <div class="privilege-details-price">500 руб.</div>
+            </div>
+            <div class="privilege-details-body">
+                <h3>Ресурсы и преимущества</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <i class="fas fa-bolt"></i>
+                        <p>3x рейты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-box-open"></i>
+                        <p>Эксклюзивные киты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-coins"></i>
+                        <p>5000 дерева, камня, мвк, металла, серы, угля, пороха</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Защита от рейда</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-home"></i>
+                        <p>Приватная зона</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-tools"></i>
+                        <p>Улучшенные инструменты</p>
+                    </div>
+                </div>
+                
+                <h3>Описание</h3>
+                <p>Привилегия "Титан" предоставляет отличные возможности для комфортной игры. Вы получаете ускоренное получение ресурсов, эксклюзивные наборы и защиту вашей базы.</p>
+                
+                <h3>Как приобрести</h3>
+                <p>Для приобретения привилегии свяжитесь с нами через Discord или Telegram, указанные в разделе контактов.</p>
+                
+                <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 20px;">Приобрести привилегию</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Детали привилегии Ветеран -->
+    <div class="privilege-details" id="veteran-details">
+        <button class="close-details">&times;</button>
+        <div class="privilege-details-content">
+            <div class="privilege-details-header">
+                <h2>Ветеран</h2>
+                <div class="privilege-details-price">1000 руб.</div>
+            </div>
+            <div class="privilege-details-body">
+                <h3>Ресурсы и преимущества</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <i class="fas fa-bolt"></i>
+                        <p>5x рейты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-box-open"></i>
+                        <p>Расширенные киты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-coins"></i>
+                        <p>15000 дерева, камня, мвк, металла, серы, угля, пороха</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Улучшенная защита</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-home"></i>
+                        <p>Большая приватная зона</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-tools"></i>
+                        <p>Эпические инструменты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-flask"></i>
+                        <p>Ранний доступ к обновлениям</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-user-tie"></i>
+                        <p>Личный менеджер</p>
+                    </div>
+                </div>
+                
+                <h3>Описание</h3>
+                <p>Привилегия "Ветеран" для тех, кто серьезно настроен на игру. Вы получаете значительные преимущества, ранний доступ к новым функциям и персональную поддержку.</p>
+                
+                <h3>Как приобрести</h3>
+                <p>Для приобретения привилегии свяжитесь с нами через Discord или Telegram, указанные в разделе контактов.</p>
+                
+                <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 20px;">Приобрести привилегию</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Детали привилегии Легенда -->
+    <div class="privilege-details" id="legend-details">
+        <button class="close-details">&times;</button>
+        <div class="privilege-details-content">
+            <div class="privilege-details-header">
+                <h2>Легенда</h2>
+                <div class="privilege-details-price">2000 руб.</div>
+            </div>
+            <div class="privilege-details-body">
+                <h3>Ресурсы и преимущества</h3>
+                <div class="resources-grid">
+                    <div class="resource-item">
+                        <i class="fas fa-bolt"></i>
+                        <p>10x рейты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-box-open"></i>
+                        <p>Легендарные киты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-coins"></i>
+                        <p>50000 дерева, камня, мвк, металла, серы, угля, пороха</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-shield-alt"></i>
+                        <p>Максимальная защита</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-home"></i>
+                        <p>Огромная приватная зона</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-tools"></i>
+                        <p>Легендарные инструменты</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-flask"></i>
+                        <p>Доступ к бета-тестированию</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-user-tie"></i>
+                        <p>Прямая связь с разработчиками</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-crown"></i>
+                        <p>Уникальный статус</p>
+                    </div>
+                    <div class="resource-item">
+                        <i class="fas fa-hammer"></i>
+                        <p>Влияние на развитие</p>
+                    </div>
+                </div>
+                
+                <h3>Описание</h3>
+                <p>Привилегия "Легенда" - максимальный уровень поддержки нашего проекта. Вы становитесь частью команды, влияете на развитие и получаете все возможные преимущества.</p>
+                
+                <h3>Как приобрести</h3>
+                <p>Для приобретения привилегии свяжитесь с нами через Discord или Telegram, указанные в разделе контактов.</p>
+                
+                <a href="#" class="btn" style="width: 100%; text-align: center; margin-top: 20px;">Приобрести привилегию</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer id="contact">
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-column">
+                    <h3>VZORKIN RUST</h3>
+                    <p>Dev Blog и сообщество Rust. Лучшие материалы о разработке и геймдеве.</p>
+                    <div class="social-links">
+                        <a href="#"><i class="fab fa-discord"></i></a>
+                        <a href="#"><i class="fab fa-telegram"></i></a>
+                        <a href="#"><i class="fab fa-youtube"></i></a>
+                        <a href="#"><i class="fab fa-vk"></i></a>
+                    </div>
+                </div>
+                <div class="footer-column">
+                    <h3>Навигация</h3>
+                    <ul>
+                        <li><a href="#" class="nav-link" data-page="home">Главная</a></li>
+                        <li><a href="#" class="nav-link" data-page="catalog">Каталог</a></li>
+                        <li><a href="#about">О проекте</a></li>
+                        <li><a href="#contact">Контакты</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Контакты</h3>
+                    <ul>
+                        <li><i class="fas fa-envelope"></i> info@vzorkin-rust.ru</li>
+                        <li><i class="fab fa-telegram"></i> @vzorkin_rust</li>
+                        <li><i class="fab fa-discord"></i> VZORKIN RUST</li>
+                        <li><i class="fas fa-map-marker-alt"></i> Россия</li>
+                    </ul>
+                </div>
+            </div>
+            <div class="copyright">
+                <p>&copy; 2023 VZORKIN RUST. Все права защищены.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Защита от F12 и правой кнопки мыши
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'F12') {
+                e.preventDefault();
+                return false;
+            }
+        });
+        
+        document.addEventListener('contextmenu', function(e) {
+            e.preventDefault();
+            return false;
+        });
+
+        // Навигация между страницами
+        document.querySelectorAll('.nav-link').forEach(link => {
+            link.addEventListener('click', function(e) {
+                e.preventDefault();
+                const page = this.getAttribute('data-page');
+                
+                if (page === 'home') {
+                    document.getElementById('home-page').style.display = 'block';
+                    document.getElementById('catalog-page').style.display = 'none';
+                } else if (page === 'catalog') {
+                    document.getElementById('home-page').style.display = 'none';
+                    document.getElementById('catalog-page').style.display = 'block';
+                }
+                
+                // Прокрутка к верху страницы
+                window.scrollTo({
+                    top: 0,
+                    behavior: 'smooth'
+                });
+            });
+        });
+
+        // Показать детали привилегии
+        document.querySelectorAll('.show-details').forEach(button => {
+            button.addEventListener('click', function(e) {
+                e.preventDefault();
+                const privilegeCard = this.closest('.privilege-card');
+                const privilegeType = privilegeCard.getAttribute('data-privilege');
+                document.getElementById(`${privilegeType}-details`).style.display = 'block';
+            });
+        });
+
+        // Закрыть детали привилегии
+        document.querySelectorAll('.close-details').forEach(button => {
+            button.addEventListener('click', function() {
+                this.closest('.privilege-details').style.display = 'none';
+            });
+        });
+
+        // Закрыть по клику вне области
+        document.querySelectorAll('.privilege-details').forEach(details => {
+            details.addEventListener('click', function(e) {
+                if (e.target === this) {
+                    this.style.display = 'none';
+                }
+            });
+        });
+
+        // Плавная прокрутка для якорных ссылок
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            if (!anchor.classList.contains('nav-link')) {
+                anchor.addEventListener('click', function (e) {
+                    e.preventDefault();
+                    
+                    const targetId = this.getAttribute('href');
+                    if (targetId === '#') return;
+                    
+                    const targetElement = document.querySelector(targetId);
+                    if (targetElement) {
+                        window.scrollTo({
+                            top: targetElement.offsetTop - 80,
+                            behavior: 'smooth'
+                        });
+                    }
+                });
+            }
+        });
+
+        // Изменение шапки при прокрутке
+        window.addEventListener('scroll', function() {
+            const header = document.querySelector('header');
+            if (window.scrollY > 100) {
+                header.style.padding = '10px 0';
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.98)';
+            } else {
+                header.style.padding = '20px 0';
+                header.style.backgroundColor = 'rgba(10, 10, 10, 0.95)';
+            }
+        });
+    </script>
+</body>
+</html>
